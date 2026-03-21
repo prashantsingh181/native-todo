@@ -1,9 +1,13 @@
-import { TodoActionType } from "./todo-action.enum";
+import { TodoActionType } from './todo-action.enum';
 
 export interface Todo {
   completed: boolean;
   id: number;
   title: string;
+}
+
+export interface TodoProviderProps {
+  children: React.ReactNode;
 }
 
 export type TodoContextState = {
@@ -17,18 +21,18 @@ export type TodoContextType = {
 
 interface TodoAddModal {
   isOpen: boolean;
-  type: "add";
+  type: 'add';
 }
 
 interface TodoUpdateModal {
   isOpen: boolean;
-  type: "update";
+  type: 'update';
   todo: Todo;
 }
 
 interface AddTodoAction {
   type: TodoActionType.ADD_TODO;
-  payload: Omit<Todo, "id">;
+  payload: Omit<Todo, 'id'>;
 }
 
 interface UpdateTodoAction {
@@ -39,6 +43,11 @@ interface UpdateTodoAction {
 interface DeleteTodoAction {
   type: TodoActionType.DELETE_TODO;
   payload: { id: number };
+}
+
+interface ReplaceTodosAction {
+  type: TodoActionType.REPLACE_TODOS;
+  payload: Todo[];
 }
 
 interface OpenAddTodoModalAction {
@@ -60,6 +69,7 @@ export type TodoAction =
   | AddTodoAction
   | UpdateTodoAction
   | DeleteTodoAction
+  | ReplaceTodosAction
   | OpenAddTodoModalAction
   | OpenUpdateTodoModalAction
   | CloseTodoModalAction;

@@ -1,10 +1,14 @@
-import { TodoActionType } from "@/context/todo-context/todo-action.enum";
-import { useTodos } from "@/context/todo-context/todo-context";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { TodoCardProps } from "./todo-card.types";
+import { Font } from '@/constants/fonts';
+import { lightTheme } from '@/constants/theme';
+import { TodoActionType } from '@/context/todo-context/todo-action.enum';
+import { useTodos } from '@/context/todo-context/todo-context';
+import useThemeStyles from '@/hooks/useThemeStyles';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { TodoCardProps } from './todo-card.types';
 
-export default function TodoCard({ todo }: TodoCardProps) {
+export default function TodoCard({ todo }: Readonly<TodoCardProps>) {
   const { todosDispatch } = useTodos();
+  const styles = useThemeStyles(createStyles);
 
   function handleDelete() {
     todosDispatch({
@@ -21,21 +25,11 @@ export default function TodoCard({ todo }: TodoCardProps) {
   }
 
   return (
-    <View
-      style={[
-        styles.todoContainer,
-        todo.completed && styles.completedTodoContainer,
-      ]}
-    >
-      <Text
-        style={[styles.todoTitle, todo.completed && styles.completedTodoTitle]}
-      >
+    <View style={[styles.todoContainer, todo.completed && styles.completedTodoContainer]}>
+      <Text style={[styles.todoTitle, todo.completed && styles.completedTodoTitle]}>
         {todo.title}
       </Text>
-      <Pressable
-        style={[styles.deleteButton, styles.editButton]}
-        onPress={handleEdit}
-      >
+      <Pressable style={[styles.deleteButton, styles.editButton]} onPress={handleEdit}>
         <Text style={styles.deleteButtonText}>Edit</Text>
       </Pressable>
       <Pressable style={styles.deleteButton} onPress={handleDelete}>
@@ -45,42 +39,47 @@ export default function TodoCard({ todo }: TodoCardProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  todoContainer: {
-    padding: 14,
-    borderWidth: 1,
-    borderRadius: 12,
-    borderColor: "rgb(5, 54, 133)",
-    marginBottom: 18,
-    backgroundColor: "rgb(210, 226, 252)",
-    flexDirection: "row",
-  },
-  completedTodoContainer: {
-    backgroundColor: "rgb(215, 215, 215)",
-    borderColor: "rgb(107, 101, 107)",
-  },
-  todoTitle: {
-    flexGrow: 1,
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "rgb(2, 19, 46)",
-  },
-  completedTodoTitle: {
-    color: "rgb(142, 140, 156)",
-    textDecorationLine: "line-through",
-  },
-  editButton: {
-    backgroundColor: "rgb(71, 141, 245)",
-    marginRight: 8,
-  },
-  deleteButton: {
-    backgroundColor: "rgb(181, 11, 36)",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-  },
-  deleteButtonText: {
-    fontSize: 12,
-    color: "white",
-  },
-});
+const createStyles = (colors: typeof lightTheme) => {
+  const styles = StyleSheet.create({
+    todoContainer: {
+      padding: 14,
+      borderWidth: 1,
+      borderRadius: 12,
+      borderColor: colors.cardBorder,
+      marginBottom: 18,
+      backgroundColor: colors.cardBackground,
+      flexDirection: 'row',
+    },
+    completedTodoContainer: {
+      backgroundColor: colors.completedCardBackground,
+      borderColor: colors.completedCardBorder,
+    },
+    todoTitle: {
+      flexGrow: 1,
+      fontSize: 16,
+      fontFamily: Font.MonoBoldItalic,
+      color: colors.text,
+    },
+    completedTodoTitle: {
+      color: colors.completedText,
+      textDecorationLine: 'line-through',
+    },
+    editButton: {
+      backgroundColor: 'rgb(71, 141, 245)',
+      marginRight: 8,
+      justifyContent: 'center',
+    },
+    deleteButton: {
+      backgroundColor: 'rgb(181, 11, 36)',
+      paddingHorizontal: 8,
+      paddingVertical: 4,
+      borderRadius: 6,
+      justifyContent: 'center',
+    },
+    deleteButtonText: {
+      fontSize: 12,
+      color: 'white',
+    },
+  });
+  return styles;
+};
